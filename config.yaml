@@ -73,7 +73,7 @@ params:
   enableEmoji: true
 
   # [Params]
-  enableGitalk: true
+  # enableGitalk: true
 
   # [Params.Gitalk]
   Gitalk: 

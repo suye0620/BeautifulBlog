@@ -255,28 +255,6 @@ pie(
 
     
     
-<div id="gitalk-container"></div>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-<script>
-  const gitalk = new Gitalk({
-    clientID: '93bba5e433f67f4139a5',
-    clientSecret: '269de81a45529defdbb990ec6e75608320ba738c',
-    repo: 'suye0620\/BlogComment.github.io',
-    owner: 'suye0620',
-    admin: ['suye0620'],
-    id: location.pathname, 
-    distractionFreeMode: false 
-  });
-  (function() {
-    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-      document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
-      return;
-    }
-    gitalk.render('gitalk-container');
-  })();
-</script>
-
 
     
     

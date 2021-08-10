@@ -10,7 +10,7 @@ tags:
   
 output:
   blogdown::html_page:
-    toc: false
+    toc: true
 
 cover: "/img/PPTTest/ppt.png"
 description: "用Rmarkdown生成PPT的测试"
@@ -21,4 +21,8 @@ summary: "这是一个用Rmarkdown生成PPT的demo。😛"
 <script src="{{< blogdown/postref >}}index.en_files/header-attrs/header-attrs.js"></script>
 
 
-<p><a href="/ppt/index.html">点击这里查看PPT</a></p>
+<center>
+<pre class="r"><code>knitr::include_url(&quot;/ppt/index.html&quot;)</code></pre>
+<iframe src="/ppt/index.html" width="672" height="400px">
+</iframe>
+</center>
