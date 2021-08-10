@@ -1,0 +1,173 @@
+---
+title: 地理信息可视化——ggplot绘制美帝某种地区指标热力图
+author: 苏烨
+date: '2021-08-10'
+slug: geographic-information-visualization
+categories:
+  - 文章
+tags:
+  - plot
+  - R Markdown
+cover: /img/GIV/fig4-1.png
+output:
+  blogdown::html_page:
+    toc: true
+---
+
+<script src="{{< blogdown/postref >}}index.en_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#前言">0 前言</a></li>
+<li><a href="#问题及数据集简介">1 问题及数据集简介</a></li>
+<li><a href="#探索性数据分析">2 探索性数据分析</a>
+<ul>
+<li><a href="#分类变量对被预测变量的影响">2.1 分类变量对被预测变量的影响</a></li>
+<li><a href="#以州为单位查看客户流失情况">2.2 以州为单位查看客户流失情况</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="前言" class="section level1">
+<h1>0 前言</h1>
+<p><span class="math inline">\(\quad\quad\)</span>本篇想法源自于大二下学期一次机器学习课程的作业内容，作业中我想要绘制美国各州地图，并在各州上用颜色深浅标识热度。为了达到如图 <a href="#fig:fig1">1</a> 显示的效果，我磕了大半天(没记错的话，从下午3：00-晚上12：00)，跟前面跑数据花的时间一样长😂。为什么花了这么久，主要原因就是网上大部分方法都已经失效，再加上自己没有用过地理shp型的数据，所以花了很多时间调bug。(<s>自己写的Bug就是这么多</s>)</p>
+<div class="figure" style="text-align: center"><span id="fig:fig1"></span>
+<img src="pic/state分类.png" alt="作图样例" width="645" />
+<p class="caption">
+图 1: 作图样例
+</p>
+</div>
+</div>
+<div id="问题及数据集简介" class="section level1">
+<h1>1 问题及数据集简介</h1>
+<p><span class="math inline">\(\quad\quad\)</span>美国作为发达国家，其电信市场已经饱和，客户增长率低。因此，市场参与者的主要关注点是控制电信客户流失率。本文将通过探索R语言C50包中的Churn数据集，以确定影响客户流失的关键因素，并构建最佳预测模型来预测流失。</p>
+</div>
+<div id="探索性数据分析" class="section level1">
+<h1>2 探索性数据分析</h1>
+<p><span class="math inline">\(\quad\quad\)</span>Churn 数据集分为 churnTrain (3333 obs.) 和 churnTest (1667 obs.)，包含 19 个预测变量和 1 个响应变量（churn = yes/no）。流失客户的比例（churn = yes）接近 14%，并且均匀分布在2个集合中。其中churnTrain将用于数据探索和模型构建，而 churnTest 将用于衡量模型性能。</p>
+<div id="分类变量对被预测变量的影响" class="section level2">
+<h2>2.1 分类变量对被预测变量的影响</h2>
+<pre class="r"><code># 使用data.table进行后续计算
+dt_churn_train &lt;- setDT(churnTrain)
+dt_churn_test &lt;- setDT(churnTest)</code></pre>
+<pre class="r"><code># 将地区编码转化为因子
+dt_churn_train[,area_code:=factor(area_code)]
+dt_churn_test[,area_code:=factor(area_code)]
+
+# 绘制各个子图
+ax1 &lt;- ggplot(dt_churn_train, aes(area_code, fill = churn)) +
+  geom_bar(position = &quot;fill&quot;) + labs(x = &quot;Area code&quot;, y = &quot;&quot;) +
+  theme(legend.position = &quot;none&quot;)
+ax2 &lt;- ggplot(dt_churn_train, aes(international_plan, fill = churn)) +
+  geom_bar(position = &quot;fill&quot;) + labs(x = &quot;International?&quot;, y = &quot;&quot;) +
+  theme(legend.position = &quot;none&quot;)
+ax3 &lt;- ggplot(dt_churn_train, aes(voice_mail_plan, fill = churn)) +
+  geom_bar(position = &quot;fill&quot;) + labs(x = &quot;Voicemail?&quot;, y = &quot;&quot;) +
+  theme(legend.position = &quot;none&quot;) 
+ax4 &lt;- ggplot(dt_churn_train, aes(number_customer_service_calls, 
+                                  fill = churn)) + 
+  geom_bar(position = &quot;fill&quot;) + labs(x = &quot;Customer calls&quot;, y = &quot;&quot;) +
+  theme(legend.position = &quot;none&quot;) 
+
+# 整图合并
+gridExtra::grid.arrange(ax1, ax2, ax3, ax4, ncol = 4, nrow = 1, 
+                        top = &quot;Churn/Non-churn Proportion&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><span class="math inline">\(\quad\quad\)</span>上图显示了分类预测变量的流失比例（红色即为流失）。按区号划分的流失率与总体流失率没有区别，而未使用语音邮件计划的客户的流失率似乎更高。开通国际漫游的客户流失率是平均水平的4倍，并且客服电话次数超过4次时，客户流失率会显着增加。</p>
+</div>
+<div id="以州为单位查看客户流失情况" class="section level2">
+<h2>2.2 以州为单位查看客户流失情况</h2>
+<p><span class="math inline">\(\quad\quad\)</span>这里是本篇的重点，我们将尝试用R语言ggplot进行地理信息可视化。</p>
+<p><span class="math inline">\(\quad\quad\)</span>首先，我们需要读取美帝各州边界shp格式文件。那么，什么是shp文件？</p>
+<p><span class="math inline">\(\quad\quad\)</span>Shapefile属于一种矢量图形格式，它能够保存几何图形的位置及相关属性。但这种格式没法存储地理数据的拓扑信息。Shapefile在九十年代初的ArcView GIS的第二个版本被首次应用。目前，许多自由的程序或商业的程序都可以读取Shapefile。</p>
+<p><span class="math inline">\(\quad\quad\)</span>Shapefile文件指的是一种文件存储的方法，实际上该种文件格式是由多个文件组成的。其中，要组成一个Shapefile，有三个文件是必不可少的，它们分别是“.shp”, “.shx”与 “.dbf”文件。表示同一数据的一组文件其文件名前缀应该相同。例如，存储一个关于湖的几何与属性数据，就必须有lake.shp，lake.shx与lake.dbf三个文件。而其中“真正”的Shapefile的后缀为shp，然而仅有这个文件数据是不完整的，必须要把其他两个附带上才能构成一组完整的地理数据。除了这三个必须的文件以外，还有八个可选的文件，使用它们可以增强空间数据的表达能力。</p>
+<span class="math inline">\(\quad\quad\)</span>我们已经从<a href="https://gadm.org/">GADM主页</a>下载得到了美国三级地理边界数据，存放在data/下(图 <a href="#fig:fig2">2</a>))。
+<div class="figure" style="text-align: center"><span id="fig:fig2"></span>
+<img src="pic/shp1.png" alt="文件目录" width="322" />
+<p class="caption">
+图 2: 文件目录
+</p>
+</div>
+<p><span class="math inline">\(\quad\quad\)</span>我们按需读取州级地理边界数据：</p>
+<pre class="r"><code>library(maptools)
+USA_map &lt;- readShapePoly(&quot;data/gadm36_USA_shp/gadm36_USA_1.shp&quot;)</code></pre>
+<center>
+<img src = 'pic/USA_map.png' alt = 'USA_map情况' width = 80%>
+</center>
+<p><span class="math inline">\(\quad\quad\)</span>给名称表USA_map_data添加一个id列与经纬度表进行连接，得到一个含有各州经纬度的DT：</p>
+<pre class="r"><code># fortify是一个函数，用于model or other R object to convert to data frame.
+USA_map_data &lt;- setDT(USA_map@data)
+USA_map_data[,id:=as.character(seq(0,.N-1))]
+USA_map_fortify&lt;-setDT(fortify(USA_map))</code></pre>
+<pre><code>## Regions defined for each Polygons</code></pre>
+<p><span class="math inline">\(\quad\quad\)</span>使用data.table进行数据整理，使用ggplot绘制最终的图像(图 <a href="#fig:fig3">3</a>)：</p>
+<pre class="r"><code>#基于id进行连接
+USA_map_merge &lt;- merge.data.table(USA_map_data,USA_map_fortify,all = T)
+
+# 生成一个州名缩写-id的对应表，像这样：
+# AL-0
+# AK-1
+# AZ-2
+state_info &lt;- USA_map_data[,.(HASC_1,id)] 
+state_info[,HASC_1:=str_sub(HASC_1,4,)]
+
+# step1计算客户流失率
+dt_ratio &lt;- dt_churn_train[,.(ratio = sum(churn == &#39;yes&#39;)/.N ),by=state]
+
+# step2向流失率表添加id(用到上面生成的state_info)
+dt_ratio &lt;- merge.data.table(x= dt_ratio,y =state_info,by.x = &#39;state&#39;,by.y = &#39;HASC_1&#39;,all = T)
+
+# 将ratio添加到USA_map_merge里
+USA_map_merge &lt;- merge.data.table(USA_map_merge,dt_ratio,by = &#39;id&#39;,all = T)
+
+# 参数fill = ratio为我们要展现的数据指标，基于该指标绘制热力图
+# 参数group = group用于分组，将经纬度数据分给各个州
+ggplot(USA_map_merge,aes(x=long,y=lat,group=group,fill=ratio))+
+  geom_polygon(colour=&quot;grey40&quot;)+
+  scale_fill_gradient(low=&quot;white&quot;,high=&quot;red&quot;)+
+  #coord_map(&quot;polyconic&quot;)+
+  theme(
+    panel.grid=element_blank(),
+    panel.background=element_blank(),
+    axis.text=element_blank(),
+    axis.ticks=element_blank(),
+    axis.title=element_blank(),
+    legend.position=c(0.4,0.4),
+  )</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:fig3"></span>
+<img src="{{< blogdown/postref >}}index.en_files/figure-html/fig3-1.png" alt="又大又丑的地图" width="672" />
+<p class="caption">
+图 3: 又大又丑的地图
+</p>
+</div>
+<p><span class="math inline">\(\quad\quad\)</span>上面这个图又大又丑，考虑将阿拉斯加、夏威夷去掉，看新的图 <a href="#fig:fig4">4</a>：</p>
+<pre class="r"><code>AnotherTest &lt;- USA_map_merge[NAME_1 != &#39;Hawaii&#39; &amp; NAME_1 != &#39;Alaska&#39;]
+ggplot(AnotherTest,aes(x=long,y=lat,group=group,fill=ratio))+
+  geom_polygon(colour=&quot;grey40&quot;)+
+  scale_fill_gradient(low=&quot;white&quot;,high=&quot;red&quot;)+
+  #coord_map(&quot;polyconic&quot;)+
+  theme(
+    panel.grid=element_blank(),
+    panel.background=element_blank(),
+    axis.text=element_blank(),
+    axis.ticks=element_blank(),
+    axis.title=element_blank(),
+    # legend.position=c(0.4,0.4),
+  )</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:fig4"></span>
+<img src="{{< blogdown/postref >}}index.en_files/figure-html/fig4-1.png" alt="新图" width="672" />
+<p class="caption">
+图 4: 新图
+</p>
+</div>
+<center>
+<img src = 'pic/妙啊.jpg' alt = '妙啊！' width = 80%>
+</center>
+<p><span class="math inline">\(\quad\quad\)</span>根据可视化结果，客户流失率因州而异。 任何有关减少流失的提议都应该更多地关注流失率高于平均水平的州。 <strong>那些流失率Top20州是：</strong></p>
+<pre class="r"><code>top20 &lt;- setorder(dt_ratio,-ratio) %&gt;% head(20)
+top20$state</code></pre>
+<pre><code>##  [1] &quot;CA&quot; &quot;NJ&quot; &quot;TX&quot; &quot;MD&quot; &quot;SC&quot; &quot;MI&quot; &quot;MS&quot; &quot;NV&quot; &quot;WA&quot; &quot;ME&quot; &quot;MT&quot; &quot;AR&quot; &quot;KS&quot; &quot;NY&quot; &quot;MN&quot;
+## [16] &quot;PA&quot; &quot;MA&quot; &quot;CT&quot; &quot;NC&quot; &quot;NH&quot;</code></pre>
+<p><span class="math inline">\(\quad\quad\)</span>如果只用ggplot绘制地图，就更简单了，精简步骤即可。</p>
+</div>
+</div>

@@ -1,0 +1,14 @@
+<div class="ui segment">
+  <button
+    class="ui circular icon button save-as-image"
+    title="{{ i18n "saveAsImage" }}"
+    onclick="savePostAsImg()">
+    <i class="save icon"></i>
+  </button>
+  <a href="https://twitter.com/intent/tweet?text={{ .Title }}&url={{ .Permalink }}" class="ui circular twitter icon button">
+    <i class="twitter icon"></i>
+  </a>
+  <a href="https://service.weibo.com/share/share.php?url={{ .Permalink }}&title=《{{ .Title }}》&" class="ui circular weibo icon button">
+    <i class="weibo icon"></i>
+  </a>
+</div>

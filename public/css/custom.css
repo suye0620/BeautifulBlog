@@ -1,0 +1,51 @@
+/* toc style */
+/* ul是格子，li是格子里的东西，可以调整 */
+/* ul控制表格边框左边距都为0 */
+aside>div>nav ul {
+    list-style-type: none;
+    margin: 0 0;
+    padding: 0 0;
+	
+	/* 底色 */
+	background-color: #ffffff;
+}
+
+/* h3标题开始前面空一点，
+li控制缩进
+*/
+aside>div>nav>ul>li>ul li {
+	padding-left: .78571429em;
+}
+
+/* h2标题加粗 */
+aside>div>nav>ul>li>a {
+	font-weight:700;
+}
+
+aside>div>nav a {
+    display:block;
+    /* 链接都为圆角 */
+	border-radius: .28571429rem;
+	/* 非纯黑 */
+	color: #24292e;
+}
+
+aside>div>nav a.active {
+    background-color: #555;
+    color: white;
+}
+
+aside>div>nav a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+
+/* 增大文章article的字体大小 */
+.main {
+    font-size: 1.2em ;
+    font-weight: 500;
+}
+
+/* .sub{
+    font-weight: 500 !important;
+} */
