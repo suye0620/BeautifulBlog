@@ -11,8 +11,11 @@ tags:
 output:
   blogdown::html_page:
     toc: false
-    
+
+cover: "/img/PPTTest/ppt.png"
 description: "用Rmarkdown生成PPT的测试"
+
+summary: "这是一个用Rmarkdown生成PPT的demo。😛"
 ---
 
-[点击这里查看PPT](/ppt/ppt1.html)
+[点击这里查看PPT](/ppt/index.html)
