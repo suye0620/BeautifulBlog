@@ -20,6 +20,6 @@ summary: "这是一个用Rmarkdown生成PPT的demo。😛"
 
 <center>
 ```{r }
-knitr::include_url("/ppt/PPTTest.html")
+knitr::include_url("/ppt/index.html")
 ```
 </center>
