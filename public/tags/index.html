@@ -56,31 +56,24 @@
   
 
   
-  .inverted a:not(.item, .ui.button) {
-     color: darkseagreen !important;
-  }
-  
 
   
   body.default {
     
-    background-color: #f7f7f7;
+    background-image: url(/img/day.jpg);
+    
+    
     
 
-    
-    background-image: url(img/day.jpg);
-    
   }
   
 
   
   body.dark {
     
-    background-color: black;
-    
 
     
-    background-image: url(img/night.jpeg);
+    background-image: url(/img/night.jpeg);
     
   }
   
@@ -109,11 +102,6 @@
   </a>
   
 
-  
-  
-  <a class="item" title="Search" onclick="toggleSearch(event)">
-    <i class="large link search icon"></i>
-  </a>
   
 
   
@@ -245,8 +233,12 @@
     
       
         <h3 class="ui header">
-          <a href="/tags/r-markdown/">R Markdown</a>&nbsp;2 articles</h3>
+          <a href="/tags/r-markdown/">R Markdown</a>&nbsp;3 articles</h3>
         <ul>
+          
+          <li>
+            <a href="/post/ppttest/">PPTTest</a>
+          </li>
           
           <li>
             <a href="/post/geographic-information-visualization/">地理信息可视化——ggplot绘制美帝某种地区指标热力图</a>
@@ -279,7 +271,7 @@
               
               <p>© 2021 Ye.S-HomePage</p>
               
-
+              
               <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
 
               
@@ -429,36 +421,14 @@
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 
     
-    <div class="ui segment" id="dream-search">
-  <div class="ui search">
-    <div class="ui transparent input">
-      <input class="prompt" type="text" placeholder="Search" />
-    </div>
-    <div class="results"></div>
-  </div>
-</div>
-<script>
-  $(document).ready(function () {
-    $.getJSON('https:\/\/suye.netlify.app\//index.json', function (data) {
-      $('.ui.search').search({
-        source: data,
-        searchFields: ['title'],
-        showNoResults: false,
-      })
-    })
-  })
-</script>
-<script src="/js/search.js"></script>
-
-    
 
     
 
     <script>
-  window.background = "#f7f7f7"
+  window.background =  null 
   window.defaultDark =  null 
-  window.backgroundDark = "black"
-  window.backgroundImageDark = "img/night.jpeg"
+  window.backgroundDark =  null 
+  window.backgroundImageDark = "/img/night.jpeg"
   window.darkNav =  null 
   window.maxTags =  null 
   window.hasTwitterEmbed =  null 

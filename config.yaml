@@ -10,7 +10,7 @@ menu:
 params:
   author: Su Ye
   avatar: /img/touxiang.jpg
-  background: '#f7f7f7'
+  # background: '#f7f7f7'
   backgroundImage: "/img/day.jpg"
       
   # social_links
@@ -23,13 +23,13 @@ params:
   motto: 得意淡然，失意坦然；喜而不狂，忧而不伤。
   siteStartYear: 2021
   hasCJKLanguage: true
-  enableSearch: true
+  # enableSearch: true
   
   # dark mode
   # defaultDark = true
-  backgroundDark: "black"
+  # backgroundDark: "black"
   backgroundImageDark: "/img/night.jpeg"
-  darkLinkColor: "darkseagreen"
+  # darkLinkColor: "darkseagreen"
   # darkNav: true
   # dark404: true
 
@@ -58,11 +58,17 @@ params:
   # customJS = []
 
   # [params.experimental]
-  jsDate: true
-  jsDateFormat: "yyyy年MM月dd日"
+  # experimenta:
+  #   jsDate: true
+  #   jsDateFormat: "yyyy年MM月dd日"
   
   # [outputs]
-  home: ["HTML", "RSS", "JSON"]
+  outputs:
+    # home: ["HTML", "RSS", "JSON"]
+
+    - html
+    - rss
+    - json
   
   enableEmoji: true
 
@@ -70,17 +76,18 @@ params:
   enableGitalk: true
 
   # [Params.Gitalk]
-  clientID: "93bba5e433f67f4139a5" # Your client ID
-  clientSecret: "269de81a45529defdbb990ec6e75608320ba738c" # Your client secret
-  repo: "suye0620/BeautifulBlog" # The repo to store comments
-  owner: "suye0620" # Your GitHub ID
-  admin: "suye0620" # Required. Github repository owner and collaborators. (Users who having write access to this repository)
-  id: "location.pathname" # The unique id of the page.
-  labels: "gitalk" # Github issue labels. If you used to use Gitment, you can change it
-  perPage: 5 # Pagination size, with maximum 100.
-  pagerDirection: "last" # Comment sorting direction, available values are 'last' and 'first'.
-  createIssueManually: false # If it is 'false', it is auto to make a Github issue when the administrators login.
-  distractionFreeMode: false # Enable hot key (cmd|ctrl + enter) submit comment.
+  Gitalk: 
+    clientID: "93bba5e433f67f4139a5" # Your client ID
+    clientSecret: "269de81a45529defdbb990ec6e75608320ba738c" # Your client secret
+    repo: "suye0620/BeautifulBlog" # The repo to store comments
+    owner: "suye0620" # Your GitHub ID
+    admin: "suye0620" # Required. Github repository owner and collaborators. (Users who having write access to this repository)
+    id: "location.pathname" # The unique id of the page.
+    labels: "gitalk" # Github issue labels. If you used to use Gitment, you can change it
+    perPage: 5 # Pagination size, with maximum 100.
+    pagerDirection: "last" # Comment sorting direction, available values are 'last' and 'first'.
+    createIssueManually: false # If it is 'false', it is auto to make a Github issue when the administrators login.
+    distractionFreeMode: false # Enable hot key (cmd|ctrl + enter) submit comment.
 
 # 支持HTML对Markdown进行排版
 markup:

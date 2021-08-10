@@ -12,6 +12,8 @@ cover: /img/GIV/fig4-1.png
 output:
   blogdown::html_page:
     toc: true
+    
+summary: "本篇想法源自于大二下学期一次机器学习课程的作业内容，一则关于如何使用ggplot绘制地图并上色的小文。搏君一笑"
 ---
 
 

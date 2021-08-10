@@ -51,13 +51,14 @@
 
   {{ if or .Site.Params.background .Site.Params.backgroundImage }}
   body.default {
+    {{ if .Site.Params.backgroundImage }}
+    background-image: url({{ .Site.Params.backgroundImage }});
+    {{ end }}
+    
     {{ if .Site.Params.background }}
     background-color: {{ .Site.Params.background }};
     {{ end }}
 
-    {{ if .Site.Params.backgroundImage }}
-    background-image: url({{ .Site.Params.backgroundImage }});
-    {{ end }}
   }
   {{ end }}
 

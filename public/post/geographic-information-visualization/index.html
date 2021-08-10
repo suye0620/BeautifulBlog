@@ -23,10 +23,7 @@
 
 
 <meta property="og:title" content="地理信息可视化——ggplot绘制美帝某种地区指标热力图" />
-<meta property="og:description" content="0 前言1 问题及数据集简介2 探索性数据分析2.1 分类变量对被预测变量的影响2.2 以州为单位查看客户流失情况0 前言\(\quad\quad\)本篇想法源自于大二下学期一次机器学习课程的作业内容，作业中我想要绘制美国各州地图，并在各州上用颜色深浅标识热度。为了达到如图 1 显示的效果，我磕了大半天(没记错的话，从下午3：00-晚上12：00)，跟前面跑数据花的时间一样长😂。为什么花了这么久，主要原因就是网上大部分方法都已经失效，再加上自己没有用过地理shp型的数据，所以花了很多时间调bug。(自己写的Bug就是这么多)
-图 1: 作图样例1 问题及数据集简介\(\quad\quad\)美国作为发达国家，其电信市场已经饱和，客户增长率低。因此，市场参与者的主要关注点是控制电信客户流失率。本文将通过探索R语言C50包中的Churn数据集，以确定影响客户流失的关键因素，并构建最佳预测模型来预测流失。
-2 探索性数据分析\(\quad\quad\)Churn 数据集分为 churnTrain (3333 obs.) 和 churnTest (1667 obs.)，包含 19 个预测变量和 1 个响应变量（churn = yes/no）。流失客户的比例（churn = yes）接近 14%，并且均匀分布在2个集合中。其中churnTrain将用于数据探索和模型构建，而 churnTest 将用于衡量模型性能。
-2.1 分类变量对被预测变量的影响# 使用data.table进行后续计算dt_churn_train &lt;- setDT(churnTrain)dt_churn_test &lt;- setDT(churnTest)# 将地区编码转化为因子dt_churn_train[,area_code:=factor(area_code)]dt_churn_test[,area_code:=factor(area_code)]# 绘制各个子图ax1 &lt;- ggplot(dt_churn_train, aes(area_code, fill = churn)) &#43;geom_bar(position = &quot;fill&quot;) &#43; labs(x = &quot;Area code&quot;, y = &quot;&quot;) &#43;theme(legend." />
+<meta property="og:description" content="本篇想法源自于大二下学期一次机器学习课程的作业内容，一则关于如何使用ggplot绘制地图并上色的小文。搏君一笑" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://suye.netlify.app/post/geographic-information-visualization/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-08-10T00:00:00+00:00" />
@@ -37,10 +34,7 @@
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="地理信息可视化——ggplot绘制美帝某种地区指标热力图"/>
-<meta name="twitter:description" content="0 前言1 问题及数据集简介2 探索性数据分析2.1 分类变量对被预测变量的影响2.2 以州为单位查看客户流失情况0 前言\(\quad\quad\)本篇想法源自于大二下学期一次机器学习课程的作业内容，作业中我想要绘制美国各州地图，并在各州上用颜色深浅标识热度。为了达到如图 1 显示的效果，我磕了大半天(没记错的话，从下午3：00-晚上12：00)，跟前面跑数据花的时间一样长😂。为什么花了这么久，主要原因就是网上大部分方法都已经失效，再加上自己没有用过地理shp型的数据，所以花了很多时间调bug。(自己写的Bug就是这么多)
-图 1: 作图样例1 问题及数据集简介\(\quad\quad\)美国作为发达国家，其电信市场已经饱和，客户增长率低。因此，市场参与者的主要关注点是控制电信客户流失率。本文将通过探索R语言C50包中的Churn数据集，以确定影响客户流失的关键因素，并构建最佳预测模型来预测流失。
-2 探索性数据分析\(\quad\quad\)Churn 数据集分为 churnTrain (3333 obs.) 和 churnTest (1667 obs.)，包含 19 个预测变量和 1 个响应变量（churn = yes/no）。流失客户的比例（churn = yes）接近 14%，并且均匀分布在2个集合中。其中churnTrain将用于数据探索和模型构建，而 churnTest 将用于衡量模型性能。
-2.1 分类变量对被预测变量的影响# 使用data.table进行后续计算dt_churn_train &lt;- setDT(churnTrain)dt_churn_test &lt;- setDT(churnTest)# 将地区编码转化为因子dt_churn_train[,area_code:=factor(area_code)]dt_churn_test[,area_code:=factor(area_code)]# 绘制各个子图ax1 &lt;- ggplot(dt_churn_train, aes(area_code, fill = churn)) &#43;geom_bar(position = &quot;fill&quot;) &#43; labs(x = &quot;Area code&quot;, y = &quot;&quot;) &#43;theme(legend."/>
+<meta name="twitter:description" content="本篇想法源自于大二下学期一次机器学习课程的作业内容，一则关于如何使用ggplot绘制地图并上色的小文。搏君一笑"/>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
@@ -64,31 +58,24 @@
   
 
   
-  .inverted a:not(.item, .ui.button) {
-     color: darkseagreen !important;
-  }
-  
 
   
   body.default {
     
-    background-color: #f7f7f7;
+    background-image: url(/img/day.jpg);
+    
+    
     
 
-    
-    background-image: url(img/day.jpg);
-    
   }
   
 
   
   body.dark {
     
-    background-color: black;
-    
 
     
-    background-image: url(img/night.jpeg);
+    background-image: url(/img/night.jpeg);
     
   }
   
@@ -127,11 +114,6 @@
   </a>
   
 
-  
-  
-  <a class="item" title="Search" onclick="toggleSearch(event)">
-    <i class="large link search icon"></i>
-  </a>
   
 
   
@@ -387,11 +369,11 @@ top20$state</code></pre>
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <script>
   const gitalk = new Gitalk({
-    clientID: '',
-    clientSecret: '',
-    repo: '',
-    owner: '',
-    admin: [''],
+    clientID: '93bba5e433f67f4139a5',
+    clientSecret: '269de81a45529defdbb990ec6e75608320ba738c',
+    repo: 'suye0620\/BeautifulBlog',
+    owner: 'suye0620',
+    admin: ['suye0620'],
     id: location.pathname, 
     distractionFreeMode: false 
   });
@@ -419,7 +401,7 @@ top20$state</code></pre>
               
               <p>© 2021 Ye.S-HomePage</p>
               
-
+              
               <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
 
               
@@ -572,36 +554,14 @@ top20$state</code></pre>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 
     
-    <div class="ui segment" id="dream-search">
-  <div class="ui search">
-    <div class="ui transparent input">
-      <input class="prompt" type="text" placeholder="Search" />
-    </div>
-    <div class="results"></div>
-  </div>
-</div>
-<script>
-  $(document).ready(function () {
-    $.getJSON('https:\/\/suye.netlify.app\//index.json', function (data) {
-      $('.ui.search').search({
-        source: data,
-        searchFields: ['title'],
-        showNoResults: false,
-      })
-    })
-  })
-</script>
-<script src="/js/search.js"></script>
-
-    
 
     
 
     <script>
-  window.background = "#f7f7f7"
+  window.background =  null 
   window.defaultDark =  null 
-  window.backgroundDark = "black"
-  window.backgroundImageDark = "img/night.jpeg"
+  window.backgroundDark =  null 
+  window.backgroundImageDark = "/img/night.jpeg"
   window.darkNav =  null 
   window.maxTags =  null 
   window.hasTwitterEmbed =  null 

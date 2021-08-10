@@ -56,31 +56,24 @@
   
 
   
-  .inverted a:not(.item, .ui.button) {
-     color: darkseagreen !important;
-  }
-  
 
   
   body.default {
     
-    background-color: #f7f7f7;
+    background-image: url(/img/day.jpg);
+    
+    
     
 
-    
-    background-image: url(img/day.jpg);
-    
   }
   
 
   
   body.dark {
     
-    background-color: black;
-    
 
     
-    background-image: url(img/night.jpeg);
+    background-image: url(/img/night.jpeg);
     
   }
   
@@ -109,11 +102,6 @@
   </a>
   
 
-  
-  
-  <a class="item" title="Search" onclick="toggleSearch(event)">
-    <i class="large link search icon"></i>
-  </a>
   
 
   
@@ -212,9 +200,40 @@
   
   <div class="sixteen wide mobile eight wide tablet eight wide computer four wide large screen four wide widescreen column dream-column">
     <article class="ui attached segment card dream-card">
+  <a class="image" href="https://suye.netlify.app/post/ppttest/">
+    
+    <img src="/img/default4.jpg" alt="PPTTest" />
+    
+  </a>
+
+  <div class="content">
+    <h2 class="ui medium header">
+      <a href="/post/ppttest/">PPTTest</a>
+    </h2>
+    <div class="meta">
+      <p class="date">
+        Wednesday, Aug 11, 2021
+      </p>
+    </div>
+    <div class="description">
+      点击这里查看PPT
+    </div>
+  </div>
+
+  <div class="extra content">
+    <div class="author">@&nbsp;Ye.S</div>
+    <div class="reading-time">
+      <i class="clock icon"></i>1 minute read</div>
+  </div>
+</article>
+
+  </div>
+  
+  <div class="sixteen wide mobile eight wide tablet eight wide computer four wide large screen four wide widescreen column dream-column">
+    <article class="ui attached segment card dream-card">
   <a class="image" href="https://suye.netlify.app/aboutme/">
     
-    <img src="/img/default3.jpg" alt="AboutMe" />
+    <img src="/img/default4.jpg" alt="AboutMe" />
     
   </a>
 
@@ -286,7 +305,7 @@
               
               <p>© 2021 Ye.S-HomePage</p>
               
-
+              
               <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</p>
 
               
@@ -436,36 +455,14 @@
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 
     
-    <div class="ui segment" id="dream-search">
-  <div class="ui search">
-    <div class="ui transparent input">
-      <input class="prompt" type="text" placeholder="Search" />
-    </div>
-    <div class="results"></div>
-  </div>
-</div>
-<script>
-  $(document).ready(function () {
-    $.getJSON('https:\/\/suye.netlify.app\//index.json', function (data) {
-      $('.ui.search').search({
-        source: data,
-        searchFields: ['title'],
-        showNoResults: false,
-      })
-    })
-  })
-</script>
-<script src="/js/search.js"></script>
-
-    
 
     
 
     <script>
-  window.background = "#f7f7f7"
+  window.background =  null 
   window.defaultDark =  null 
-  window.backgroundDark = "black"
-  window.backgroundImageDark = "img/night.jpeg"
+  window.backgroundDark =  null 
+  window.backgroundImageDark = "/img/night.jpeg"
   window.darkNav =  null 
   window.maxTags =  null 
   window.hasTwitterEmbed =  null 
