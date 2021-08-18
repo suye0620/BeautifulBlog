@@ -6,23 +6,14 @@
     <description>Recent content in R Markdown on Ye.S-HomePage</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans</language>
-    <lastBuildDate>Wed, 11 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://suye.netlify.app/tags/r-markdown/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>PPTTest</title>
-      <link>https://suye.netlify.app/post/ppttest/</link>
-      <pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://suye.netlify.app/post/ppttest/</guid>
-      <description>这是一个用Rmarkdown生成PPT的demo。😛</description>
-    </item>
-    
+    <lastBuildDate>Tue, 10 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://suye.netlify.app/tags/r-markdown/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>地理信息可视化——ggplot绘制美帝某种地区指标热力图</title>
       <link>https://suye.netlify.app/post/geographic-information-visualization/</link>
       <pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate>
       
       <guid>https://suye.netlify.app/post/geographic-information-visualization/</guid>
-      <description>本篇想法源自于大二下学期一次机器学习课程的作业内容，一则关于如何使用ggplot绘制地图并上色的小文。搏君一笑</description>
+      <description>本篇想法源自于大二下学期一次机器学习课程的作业内容，一则关于如何使用ggplot绘制地图并上色的小文。博君一笑</description>
     </item>
     
     <item>

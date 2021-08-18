@@ -23,16 +23,19 @@ summary: "关于LDA主题模型的数学推导过程"
 <ul>
 <li><a href="#前言">前言</a></li>
 <li><a href="#统计文本建模">统计文本建模</a></li>
-<li><a href="#unigram-model一元语法模型">Unigram Model(一元语法模型)</a></li>
+<li><a href="#unigram-model一元语法模型">Unigram Model(一元语法模型)</a>
+<ul>
+<li><a href="#unigram-model的概念">Unigram Model的概念</a></li>
+<li><a href="#补充1多项分布">补充1：多项分布</a></li>
+</ul></li>
 </ul>
 </div>
 
 <div id="前言" class="section level2">
 <h2>前言</h2>
-<p><span class="math inline">\(\quad\)</span>在机器学习术语中，LDA既指Linear Discriminant Analysis(线性判别分析)，又指Latent Dirichlet Allocation(隐含迪利克雷分布)。在这篇文章中，我们研究的将是后者。LDA是在我大二下第一次做市场调
-查大赛时进入我的视线的。当时应用此法做主题-关键词提取时，我虽然感觉其原理晦涩难懂、读起来脑壳 痛，但是从做出来的效果来看用此法进行简单的文本关键词抽取是非常省事的。之后，我在完成数据科学 概论、Python数据分析这两门课程时，又反复琢磨此法原理，但还是徒劳无功。现在，我决心从头到尾梳理 一遍此法的数学原理，将其功力公诸于世。</p>
+<p><span class="math inline">\(\quad\)</span>在机器学习术语中，LDA既指Linear Discriminant Analysis(线性判别分析)，又指Latent Dirichlet Allocation(隐含迪利克雷分布)。在这篇文章中，我们研究的将是后者。LDA是在我大二下第一次做市场调 查大赛时进入我的视线的。当时应用此法做主题-关键词提取时，我虽然感觉其原理晦涩难懂、读起来脑壳 痛，但是从做出来的效果来看用此法进行简单的文本关键词抽取是非常省事的。之后，我在完成数据科学 概论、Python数据分析这两门课程时，又反复琢磨此法原理，但还是徒劳无功。现在，我决心从头到尾梳理 一遍此法的数学原理，将其功力公诸于世。</p>
 <center>
-<img src="pic/cainiao.jpg" alt="菜鸟每天飞过" />{width = 60%}
+<p><img alt = '菜鸟每天飞过' src = "pic/cainiao.jpg" width=40%></p>
 </center>
 </div>
 <div id="统计文本建模" class="section level2">
@@ -48,6 +51,8 @@ summary: "关于LDA主题模型的数学推导过程"
 </div>
 <div id="unigram-model一元语法模型" class="section level2">
 <h2>Unigram Model(一元语法模型)</h2>
+<div id="unigram-model的概念" class="section level3">
+<h3>Unigram Model的概念</h3>
 <p><span class="math inline">\(\quad\)</span>假设我们的词典(语料库corpus)中一共有<span class="math inline">\(V\)</span>个词<span class="math inline">\(v_1,v_2,...,v_V\)</span>，那么简单的Unigram Model就认为文本是基于如下规则产生的。</p>
 <table>
 <thead>
@@ -60,8 +65,27 @@ summary: "关于LDA主题模型的数学推导过程"
 <td align="left">1. 假设有一个骰子，这个骰子有<span class="math inline">\(V\)</span>个面，每个面对应一个词，各个面的概率不一；</td>
 </tr>
 <tr class="even">
-<td align="left">2.每抛掷一次骰子，抛出的面就对应地产生一个词；如果一篇文档中有<span class="math inline">\(n\)</span>个词，产生一篇文档就是要独立地抛掷<span class="math inline">\(n\)</span>次骰子产生这<span class="math inline">\(n\)</span>个词。</td>
+<td align="left">2. 每抛掷一次骰子，抛出的面就对应地产生一个词；如果一篇文档中有<span class="math inline">\(n\)</span>个词，产生一篇文档就要独立地抛掷<span class="math inline">\(n\)</span>次骰子产生这<span class="math inline">\(n\)</span>个词。</td>
 </tr>
 </tbody>
 </table>
+<p><span class="math inline">\(\quad\)</span>这个骰子的各个面的概率记为<span class="math inline">\(\overrightarrow{p} = (p_1,p_2,...,p_V)\)</span>，其中<span class="math inline">\(\sum_{k = 1}^Vp_k = 1\)</span>，所以每次投掷骰子的过程类似于一个抛硬币的贝努利实验，只是贝努利实验中我们抛的是一个“两面的骰子”，而此处抛掷的是一个<span class="math inline">\(V\)</span>面的骰子，我们把抛这个<span class="math inline">\(V\)</span>面骰子的实验记为<span class="math inline">\(w \sim Mult(V,\overrightarrow{p})\)</span>。</p>
+<p>说明：Multinomial distribution——多项分布，<span class="math inline">\(w \sim Mult(V,\overrightarrow{p})\)</span>的含义为，在骰子各面或者说语料库中各个词出现的概率给定的情况下(<span class="math inline">\(\overrightarrow{p}\)</span>)，我们进行一次生成word的实验，则这个word符合多项分布</p>
+</div>
+<div id="补充1多项分布" class="section level3">
+<h3>补充1：多项分布</h3>
+<p><span class="math inline">\(\quad\)</span>多项分布，Wiki百科的定义是这样的：假设一个人做了一个实验，他从一个装有<span class="math inline">\(k\)</span>种不同颜色球的袋子里有放回地摸出<span class="math inline">\(n\)</span>个球，对于同一种颜色的球，被摸到的概率都是相等的。然后，我们用<span class="math inline">\(X_i\)</span>表示摸到第<span class="math inline">\(i\)</span>(<span class="math inline">\(1 \leq i \leq k\)</span>)种颜色球的个数，用<span class="math inline">\(p_i\)</span>表示实验中摸到第<span class="math inline">\(i\)</span>种颜色球的概率，则这个实验的结果(一系列<span class="math inline">\(X_i\)</span>)满足多项分布，有：</p>
+<!-- 公式区 -->
+<p><span class="math display">\[\begin{align*}
+
+&amp; P(X_1 = x_1,X_2=x_2,…,X_k = x_k) \\
+&amp; =
+\begin{cases}
+\frac{n!}{x_1!\cdots x_k!}p_1^{x_1}\times \cdots \times p_k^{x_k}, &amp; \text{when $\sum_{i = 1}^k x_i = n$,}\\
+0, &amp; \text{otherwise.}
+\end{cases}\\
+
+&amp; \text{其中$x_1,X_2=x_2,…,X_k = x_k$均为非负整数}
+\end{align*}\]</span></p>
+</div>
 </div>
