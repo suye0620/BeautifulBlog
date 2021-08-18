@@ -71,7 +71,7 @@ summary: "欢迎来到我的主页😀，记得多点几下按钮，看看它的
 <p>
 📫Email：small_black_luo@163.com
 </p>
-对了，如果你觉得他的主页不错，记得到他的<a href = 'https://github.com/suye0620'>Github</a>上给主页repo——AnotherTest一个✨，他会非常高兴！
+对了，如果你觉得他的主页不错，记得到他的<a href = 'https://github.com/suye0620'>Github</a>上给主页repo——BeautifulBlog一个✨，他会非常高兴！
 </center>
 
 

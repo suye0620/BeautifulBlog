@@ -1,0 +1,50 @@
+---
+title: LDA主题模型数学推导
+author: Ye.S
+date: '2021-08-18'
+slug: [ldamath]
+categories:
+  - 文章
+tags:
+  - math
+  - NLP
+  
+cover: /img/LDAMath/LDAcover.jpg
+output:
+  blogdown::html_page:
+    toc: true
+    
+summary: "关于LDA主题模型的数学推导过程"
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F,warning = F,error = F)
+```
+
+## 前言
+
+$\quad$在机器学习术语中，LDA既指Linear Discriminant Analysis(线性判别分析)，又指Latent Dirichlet Allocation(隐含迪利克雷分布)。在这篇文章中，我们研究的将是后者。LDA是在我大二下第一次做市场调
+查大赛时进入我的视线的。当时应用此法做主题-关键词提取时，我虽然感觉其原理晦涩难懂、读起来脑壳 痛，但是从做出来的效果来看用此法进行简单的文本关键词抽取是非常省事的。之后，我在完成数据科学 概论、Python数据分析这两门课程时，又反复琢磨此法原理，但还是徒劳无功。现在，我决心从头到尾梳理 一遍此法的数学原理，将其功力公诸于世。
+
+<center>
+![菜鸟每天飞过](./pic/cainiao.jpg){width = 60%}
+</center>
+
+## 统计文本建模
+
+$\quad$我们日常生活中产生了大量的文本，如果每一个文本存储为一篇文档，那么每篇文档从人的观察来说就是有序的词的序列$d = (w_1,w_2,...,w_n)$。
+
+```{r ,fig.align="center",fig.cap="包含m篇文档的语料库"}
+knitr::include_graphics("./pic/pic_1-1.jpg")
+
+```
+
+$\quad$统计文本建模的目的就是探寻这些观察到语料库中的词序列是如何生成的。LDA就是一种优秀的统计文本建模方法。在讨论LDA模型前，我们先研究一下文本主题模型——Unigram Model以及LDA的前身PLSA。
+
+## Unigram Model(一元语法模型)
+
+$\quad$假设我们的词典(语料库corpus)中一共有$V$个词$v_1,v_2,...,v_V$，那么简单的Unigram Model就认为文本是基于如下规则产生的。
+
+|Unigram Model|
+|:-|
+|1. 假设有一个骰子，这个骰子有$V$个面，每个面对应一个词，各个面的概率不一；
+2.每抛掷一次骰子，抛出的面就对应地产生一个词；如果一篇文档中有$n$个词，产生一篇文档就是要独立地抛掷$n$次骰子产生这$n$个词。|

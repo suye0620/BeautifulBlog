@@ -1,0 +1,67 @@
+---
+title: LDA主题模型数学推导
+author: Ye.S
+date: '2021-08-18'
+slug: [ldamath]
+categories:
+  - 文章
+tags:
+  - math
+  - NLP
+  
+cover: /img/LDAMath/LDAcover.jpg
+output:
+  blogdown::html_page:
+    toc: true
+    
+summary: "关于LDA主题模型的数学推导过程"
+---
+
+<script src="{{< blogdown/postref >}}index.en_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#统计文本建模">统计文本建模</a></li>
+<li><a href="#unigram-model一元语法模型">Unigram Model(一元语法模型)</a></li>
+</ul>
+</div>
+
+<div id="前言" class="section level2">
+<h2>前言</h2>
+<p><span class="math inline">\(\quad\)</span>在机器学习术语中，LDA既指Linear Discriminant Analysis(线性判别分析)，又指Latent Dirichlet Allocation(隐含迪利克雷分布)。在这篇文章中，我们研究的将是后者。LDA是在我大二下第一次做市场调
+查大赛时进入我的视线的。当时应用此法做主题-关键词提取时，我虽然感觉其原理晦涩难懂、读起来脑壳 痛，但是从做出来的效果来看用此法进行简单的文本关键词抽取是非常省事的。之后，我在完成数据科学 概论、Python数据分析这两门课程时，又反复琢磨此法原理，但还是徒劳无功。现在，我决心从头到尾梳理 一遍此法的数学原理，将其功力公诸于世。</p>
+<center>
+<img src="pic/cainiao.jpg" alt="菜鸟每天飞过" />{width = 60%}
+</center>
+</div>
+<div id="统计文本建模" class="section level2">
+<h2>统计文本建模</h2>
+<p><span class="math inline">\(\quad\)</span>我们日常生活中产生了大量的文本，如果每一个文本存储为一篇文档，那么每篇文档从人的观察来说就是有序的词的序列<span class="math inline">\(d = (w_1,w_2,...,w_n)\)</span>。</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-1"></span>
+<img src="pic/pic_1-1.jpg" alt="包含m篇文档的语料库" width="266" />
+<p class="caption">
+图 1: 包含m篇文档的语料库
+</p>
+</div>
+<p><span class="math inline">\(\quad\)</span>统计文本建模的目的就是探寻这些观察到语料库中的词序列是如何生成的。LDA就是一种优秀的统计文本建模方法。在讨论LDA模型前，我们先研究一下文本主题模型——Unigram Model以及LDA的前身PLSA。</p>
+</div>
+<div id="unigram-model一元语法模型" class="section level2">
+<h2>Unigram Model(一元语法模型)</h2>
+<p><span class="math inline">\(\quad\)</span>假设我们的词典(语料库corpus)中一共有<span class="math inline">\(V\)</span>个词<span class="math inline">\(v_1,v_2,...,v_V\)</span>，那么简单的Unigram Model就认为文本是基于如下规则产生的。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Unigram Model</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1. 假设有一个骰子，这个骰子有<span class="math inline">\(V\)</span>个面，每个面对应一个词，各个面的概率不一；</td>
+</tr>
+<tr class="even">
+<td align="left">2.每抛掷一次骰子，抛出的面就对应地产生一个词；如果一篇文档中有<span class="math inline">\(n\)</span>个词，产生一篇文档就是要独立地抛掷<span class="math inline">\(n\)</span>次骰子产生这<span class="math inline">\(n\)</span>个词。</td>
+</tr>
+</tbody>
+</table>
+</div>
