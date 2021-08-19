@@ -177,7 +177,7 @@
                   
                 
 
-              | 1 minute read
+              | 2 minutes read
 
               
               | Update at
@@ -253,7 +253,7 @@
 </tbody>
 </table>
 <p><span class="math inline">\(\quad\)</span>这个骰子的各个面的概率记为<span class="math inline">\(\overrightarrow{p} = (p_1,p_2,...,p_V)\)</span>，其中<span class="math inline">\(\sum_{k = 1}^Vp_k = 1\)</span>，所以每次投掷骰子的过程类似于一个抛硬币的贝努利实验，只是贝努利实验中我们抛的是一个“两面的骰子”，而此处抛掷的是一个<span class="math inline">\(V\)</span>面的骰子，我们把抛这个<span class="math inline">\(V\)</span>面骰子的实验记为<span class="math inline">\(w \sim Mult(V,\overrightarrow{p})\)</span>。</p>
-<p>说明：Multinomial distribution——多项分布，<span class="math inline">\(w \sim Mult(V,\overrightarrow{p})\)</span>的含义为，在骰子各面或者说语料库中各个词出现的概率给定的情况下(<span class="math inline">\(\overrightarrow{p}\)</span>)，我们进行一次生成word的实验，则这个word符合多项分布</p>
+<p>说明：Multinomial distribution——多项分布，<span class="math inline">\(w \sim Mult(V,\overrightarrow{p})\)</span>的含义为，在骰子各面或者说语料库中各个词出现的概率给定的情况下(<span class="math inline">\(\overrightarrow{p}\)</span>)，我们进行一次生成word的实验，则这个word符合多项分布。</p>
 </div>
 <div id="补充1多项分布" class="section level3">
 <h3>补充1：多项分布</h3>
@@ -264,11 +264,87 @@
 &amp; P(X_1 = x_1,X_2=x_2,…,X_k = x_k) \\
 &amp; =
 \begin{cases}
-\frac{n!}{x_1!\cdots x_k!}p_1^{x_1}\times \cdots \times p_k^{x_k}, &amp; \text{when $\sum_{i = 1}^k x_i = n$,}\\
-0, &amp; \text{otherwise.}
+\frac{n!}{x_1!\cdots x_k!}p_1^{x_1}\times \cdots \times p_k^{x_k} &amp;, &amp; \text{when $\sum_{i = 1}^k x_i = n$,}\\
+0 &amp;, &amp; \text{otherwise.}
 \end{cases}\\
 
 &amp; \text{其中$x_1,X_2=x_2,…,X_k = x_k$均为非负整数}
+\end{align*}\]</span></p>
+<p><span class="math inline">\(\quad\)</span>对于一篇文档<span class="math inline">\(d = \overrightarrow{w} = (w_1,w_2, \cdots ,w_n)\)</span>，该文档被生成的概率就是
+<span class="math display">\[p(\overrightarrow{w}) = p(w_1,w_2, \cdots ,w_n) = p(w_1)p(w_2)\cdots p(w_n)\]</span>
+而文档和文档之间我们认为是独立的，所以如果语料中有多篇文档<span class="math inline">\(W = (\overrightarrow{w_1},\overrightarrow{w_2}, \cdots,\overrightarrow{w_m})\)</span>(用向量表示一个corpus)，则该语料的概率是
+<span class="math display">\[
+p(W) = p(\overrightarrow{w_1})p(\overrightarrow{w_2})\cdots p(\overrightarrow{w_n})
+\]</span></p>
+<p><span class="math inline">\(\quad\)</span>在Unigram Model中，我们假设了文档之间是独立可交换的，而文档中的词也是独立可交换的，所以一篇文档相当于一个袋子，里面装了一些词，而词的顺序信息就无关紧要了，这样的模型也称为词袋模型(Bag-of-words)。</p>
+<p><span class="math inline">\(\quad\)</span>假设语料中总的词频是<span class="math inline">\(N\)</span>(所有词的词频加总，我的理解是我们做上述多项分布实验的次数)，在所有的<span class="math inline">\(N\)</span>个词中，如果我们关注每个词<span class="math inline">\(w_i\)</span>的发生次数<span class="math inline">\(n_i\)</span>(词频)，那么<span class="math inline">\(\overrightarrow{n} = (n_1,n_2, \cdots ,n_V),其中\sum_{k = 1}^{V}n_k = N\)</span>就是一个多项分布：</p>
+<!-- 公式区 -->
+<p><span class="math display">\[\begin{align*}
+\overrightarrow{n} \sim Mult(N,\overrightarrow{p})\\
+
+p(\overrightarrow{n}) 
+= \binom{N}{\overrightarrow{n}}\prod_{k = 1}^{V}p_k^{n_k}\\
+\end{align*}\]</span></p>
+<p><span class="math inline">\(\quad\)</span>这里关于<span class="math inline">\(\binom{N}{\overrightarrow{n}}\)</span>，我想多说几句。首先这种写法我只在《LDA数学八卦》上见过，个人觉得有点迷惑。所以根据多项分布的计算公式，个人觉得它是这个含义：</p>
+<!-- 公式区 -->
+<p><span class="math display">\[\begin{align*}
+
+\binom{N}{\overrightarrow{n}}
+&amp;= C_N^{n_1} C_{N-{n_1}}^{n_2} C_{N-{n_1}-{n_2}}^{n_3} \cdots \\
+&amp;= \frac{N!}{n_1!n_2! \cdots n_V!}
+\end{align*}\]</span></p>
+<p><span class="math inline">\(\quad\)</span>承上面的假设，并且语料库中各文档(设有m篇)相互独立，此时语料库的概率<span class="math inline">\(p(\overrightarrow{w})\)</span>是：
+<span class="math display">\[
+p(W) = p(\overrightarrow{w_1})p(\overrightarrow{w_2}) \cdots p(\overrightarrow{w_m}) =  \prod_{k=1}^{V}p_k^{n_k} \\
+注：因为词袋模型忽略词序，\\
+故直接概率连乘。
+\]</span></p>
+<p><span class="math inline">\(\quad\)</span>现在，我们的任务就是用手中的文本(样本)估计Unigram模型中的参数<span class="math inline">\(\overrightarrow{p}\)</span>，也就是计算语料库中各个词出现的概率是多大。按照频率派的观点，使用MLE最大化<span class="math inline">\(P(W)\)</span>。下面给出一个详细的推导步骤：</p>
+<ol style="list-style-type: decimal">
+<li>取似然函数为
+<span class="math display">\[
+L(\overrightarrow{p})
+= \prod_{k=1}^{V}p_k^{n_k}\\
+\]</span></li>
+<li>对数似然函数为</li>
+</ol>
+<p><span class="math display">\[
+lnL(\overrightarrow{p}) = \sum_{k=1}^{V}n_kln(p_k)
+\]</span></p>
+<ol start="3" style="list-style-type: decimal">
+<li>要使<span class="math inline">\(L(\overrightarrow{p})\)</span>最大，即要使<span class="math inline">\(lnL(\overrightarrow{p})\)</span>最大。而<span class="math inline">\(lnL(\overrightarrow{p})\)</span>这个多元函数是有约束条件的：<span class="math inline">\(\sum_{k=1}^V n_k = N\)</span>和<span class="math inline">\(\sum_{k=1}^{V}p_k = 1\)</span>，故用拉格朗日乘数法求之：</li>
+</ol>
+<!-- 公式区 -->
+<p><span class="math display">\[\begin{align*}
+令F(\overrightarrow{p},\lambda) = \sum_{k=1}^{V}n_k ln(p_k) - \lambda(\sum_{k=1}^{V}p_k -1)\\
+\end{align*}\]</span></p>
+<p><span class="math display">\[\begin{align*}
+再令
+\begin{cases}
+\frac{\partial F}{\partial p_k}
+&amp;=&amp; \frac{n_k}{p_k} - \lambda =0\\
+\frac{\partial F}{\partial \lambda}
+&amp;=&amp; \sum_{k=1}^{V}p_k -1 =0
+\end{cases}
+\end{align*}\]</span></p>
+<p><span class="math display">\[\begin{align*}
+得
+\begin{cases}
+p_k = \frac{n_k}{\lambda}\\
+\sum_{k=1}^{V}p_k = 1
+\end{cases}
+\end{align*}\]</span></p>
+<p><span class="math display">\[\begin{align*}
+故
+\sum_{k=1}^{V}p_k = 
+\sum_{k=1}^{V}\frac{n_k}{\lambda} = 
+\frac{\sum_{k=1}^{V}n_k}{\lambda} = 
+\frac{N}{\lambda} = 1
+\end{align*}\]</span></p>
+<p><span class="math display">\[\begin{align*}
+即有
+\lambda = N\\
+\hat{p_k} = \frac{n_k}{\lambda} = \frac{n_k}{N}
 \end{align*}\]</span></p>
 </div>
 </div>

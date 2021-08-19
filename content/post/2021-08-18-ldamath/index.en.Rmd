@@ -55,7 +55,7 @@ $\quad$假设我们的词典(语料库corpus)中一共有$V$个词$v_1,v_2,...,v
 
 $\quad$这个骰子的各个面的概率记为$\overrightarrow{p} = (p_1,p_2,...,p_V)$，其中$\sum_{k = 1}^Vp_k = 1$，所以每次投掷骰子的过程类似于一个抛硬币的贝努利实验，只是贝努利实验中我们抛的是一个"两面的骰子"，而此处抛掷的是一个$V$面的骰子，我们把抛这个$V$面骰子的实验记为$w \sim Mult(V,\overrightarrow{p})$。
 
-说明：Multinomial distribution------多项分布，$w \sim Mult(V,\overrightarrow{p})$的含义为，在骰子各面或者说语料库中各个词出现的概率给定的情况下($\overrightarrow{p}$)，我们进行一次生成word的实验，则这个word符合多项分布
+说明：Multinomial distribution------多项分布，$w \sim Mult(V,\overrightarrow{p})$的含义为，在骰子各面或者说语料库中各个词出现的概率给定的情况下($\overrightarrow{p}$)，我们进行一次生成word的实验，则这个word符合多项分布。
 
 ### 补充1：多项分布
 
@@ -67,9 +67,99 @@ $\quad$多项分布，Wiki百科的定义是这样的：假设一个人做了一
 & P(X_1 = x_1,X_2=x_2,…,X_k = x_k) \\
 & =
 \begin{cases}
-\frac{n!}{x_1!\cdots x_k!}p_1^{x_1}\times \cdots \times p_k^{x_k}, & \text{when $\sum_{i = 1}^k x_i = n$,}\\
-0, & \text{otherwise.}
+\frac{n!}{x_1!\cdots x_k!}p_1^{x_1}\times \cdots \times p_k^{x_k} &, & \text{when $\sum_{i = 1}^k x_i = n$,}\\
+0 &, & \text{otherwise.}
 \end{cases}\\
 
 & \text{其中$x_1,X_2=x_2,…,X_k = x_k$均为非负整数}
 \end{align*}
+
+$\quad$对于一篇文档$d = \overrightarrow{w} = (w_1,w_2, \cdots ,w_n)$，该文档被生成的概率就是
+$$p(\overrightarrow{w}) = p(w_1,w_2, \cdots ,w_n) = p(w_1)p(w_2)\cdots p(w_n)$$
+而文档和文档之间我们认为是独立的，所以如果语料中有多篇文档$W = (\overrightarrow{w_1},\overrightarrow{w_2}, \cdots,\overrightarrow{w_m})$(用向量表示一个corpus)，则该语料的概率是
+$$
+p(W) = p(\overrightarrow{w_1})p(\overrightarrow{w_2})\cdots p(\overrightarrow{w_n})
+$$
+
+$\quad$在Unigram Model中，我们假设了文档之间是独立可交换的，而文档中的词也是独立可交换的，所以一篇文档相当于一个袋子，里面装了一些词，而词的顺序信息就无关紧要了，这样的模型也称为词袋模型(Bag-of-words)。
+
+$\quad$假设语料中总的词频是$N$(所有词的词频加总，我的理解是我们做上述多项分布实验的次数)，在所有的$N$个词中，如果我们关注每个词$w_i$的发生次数$n_i$(词频)，那么$\overrightarrow{n} = (n_1,n_2, \cdots ,n_V),其中\sum_{k = 1}^{V}n_k = N$就是一个多项分布：
+
+<!-- 公式区 -->
+\begin{align*}
+\overrightarrow{n} \sim Mult(N,\overrightarrow{p})\\
+
+p(\overrightarrow{n}) 
+= \binom{N}{\overrightarrow{n}}\prod_{k = 1}^{V}p_k^{n_k}\\
+\end{align*}
+
+$\quad$这里关于$\binom{N}{\overrightarrow{n}}$，我想多说几句。首先这种写法我只在《LDA数学八卦》上见过，个人觉得有点迷惑。所以根据多项分布的计算公式，个人觉得它是这个含义：
+
+<!-- 公式区 -->
+\begin{align*}
+
+\binom{N}{\overrightarrow{n}}
+&= C_N^{n_1} C_{N-{n_1}}^{n_2} C_{N-{n_1}-{n_2}}^{n_3} \cdots \\
+&= \frac{N!}{n_1!n_2! \cdots n_V!}
+\end{align*}
+
+$\quad$承上面的假设，并且语料库中各文档(设有m篇)相互独立，此时语料库的概率$p(\overrightarrow{w})$是：
+$$
+p(W) = p(\overrightarrow{w_1})p(\overrightarrow{w_2}) \cdots p(\overrightarrow{w_m}) =  \prod_{k=1}^{V}p_k^{n_k} \\
+注：因为词袋模型忽略词序，\\
+故直接概率连乘。
+$$
+
+$\quad$现在，我们的任务就是用手中的文本(样本)估计Unigram模型中的参数$\overrightarrow{p}$，也就是计算语料库中各个词出现的概率是多大。按照频率派的观点，使用MLE最大化$P(W)$。下面给出一个详细的推导步骤：
+
+1. 取似然函数为
+$$
+L(\overrightarrow{p})
+= \prod_{k=1}^{V}p_k^{n_k}\\
+$$
+2. 对数似然函数为
+
+$$
+lnL(\overrightarrow{p}) = \sum_{k=1}^{V}n_kln(p_k)
+$$
+
+3. 要使$L(\overrightarrow{p})$最大，即要使$lnL(\overrightarrow{p})$最大。而$lnL(\overrightarrow{p})$这个多元函数是有约束条件的：$\sum_{k=1}^V n_k = N$和$\sum_{k=1}^{V}p_k = 1$，故用拉格朗日乘数法求之：
+
+<!-- 公式区 -->
+
+\begin{align*}
+令F(\overrightarrow{p},\lambda) = \sum_{k=1}^{V}n_k ln(p_k) - \lambda(\sum_{k=1}^{V}p_k -1)\\
+\end{align*}
+
+\begin{align*}
+再令
+\begin{cases}
+\frac{\partial F}{\partial p_k}
+&=& \frac{n_k}{p_k} - \lambda =0\\
+\frac{\partial F}{\partial \lambda}
+&=& \sum_{k=1}^{V}p_k -1 =0
+\end{cases}
+\end{align*}
+
+\begin{align*}
+得
+\begin{cases}
+p_k = \frac{n_k}{\lambda}\\
+\sum_{k=1}^{V}p_k = 1
+\end{cases}
+\end{align*}
+
+\begin{align*}
+故
+\sum_{k=1}^{V}p_k = 
+\sum_{k=1}^{V}\frac{n_k}{\lambda} = 
+\frac{\sum_{k=1}^{V}n_k}{\lambda} = 
+\frac{N}{\lambda} = 1
+\end{align*}
+
+\begin{align*}
+即有
+\lambda = N\\
+\hat{p_k} = \frac{n_k}{\lambda} = \frac{n_k}{N}
+\end{align*}
+
