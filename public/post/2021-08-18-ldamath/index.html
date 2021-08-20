@@ -210,6 +210,7 @@
 <ul>
 <li><a href="#unigram-model的概念">Unigram Model的概念</a></li>
 <li><a href="#补充1多项分布">补充1：多项分布</a></li>
+<li><a href="#补充2先验分布后验分布共轭分布">补充2：先验分布、后验分布、共轭分布</a></li>
 </ul></li>
 </ul>
 </div>
@@ -245,7 +246,7 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1. 假设有一个骰子，这个骰子有<span class="math inline">\(V\)</span>个面，每个面对应一个词，各个面的概率不一；</td>
+<td align="left">1. 假设有一个骰子，这个骰子有<span class="math inline">\(V\)</span>个面，每个面对应一个词，各个面朝上的概率不一；</td>
 </tr>
 <tr class="even">
 <td align="left">2. 每抛掷一次骰子，抛出的面就对应地产生一个词；如果一篇文档中有<span class="math inline">\(n\)</span>个词，产生一篇文档就要独立地抛掷<span class="math inline">\(n\)</span>次骰子产生这<span class="math inline">\(n\)</span>个词。</td>
@@ -346,6 +347,69 @@ p_k = \frac{n_k}{\lambda}\\
 \lambda = N\\
 \hat{p_k} = \frac{n_k}{\lambda} = \frac{n_k}{N}
 \end{align*}\]</span></p>
+</div>
+<div id="补充2先验分布后验分布共轭分布" class="section level3">
+<h3>补充2：先验分布、后验分布、共轭分布</h3>
+<p><span class="math inline">\(\quad\)</span>以上模型，均基于频率学派观点。贝叶斯统计学派会对此有不同的意见。在他们看来，一切参数都是随机变量，上述Unigram Model中的<span class="math inline">\(\overrightarrow{p}\)</span>不是唯一固定的，它是一个随机变量。基于这样的想法，我们对Unigram Model的规则进行修改：</p>
+<table>
+<colgroup>
+<col width="100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">贝叶斯版本的Unigram Model</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1. 有一个装有无穷多个骰子的坛子，每个骰子都有<span class="math inline">\(V\)</span>个面，每个面对应一个词，各个面朝上的概率不一。并且各个骰子代表的<span class="math inline">\(\overrightarrow{p}\)</span>不一样；</td>
+</tr>
+<tr class="even">
+<td align="left">2. 我们从坛子里抽出一个骰子，即选择一个<span class="math inline">\(\overrightarrow{p}\)</span>，然后用这个骰子不断地抛，直至产生了语料中的所有词(即达到了上面那个语料库词频向量<span class="math inline">\(\overrightarrow{n}\)</span>)。</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(\quad\)</span>这个坛子里面，骰子可以是无穷多个，有些类型的骰子多，有些类型的骰子少。所以从概率分布的角度看，坛子里面骰子代表的<span class="math inline">\(\overrightarrow{p}\)</span>服从一个概率分布<span class="math inline">\(P(\overrightarrow{p})\)</span>，这个分布称为参数<span class="math inline">\(\overrightarrow{p}\)</span>的先验分布。</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-2"></span>
+<img src="pic/Unigram1.jpg" alt="两种观点下Unigram Model的对比" width="50%" /><img src="pic/Unigram2.jpg" alt="两种观点下Unigram Model的对比" width="50%" />
+<p class="caption">
+图 2: 两种观点下Unigram Model的对比
+</p>
+</div>
+<p><span class="math inline">\(\quad\)</span>下面我们介绍一下先验分布、后验分布、共轭分布的概念，为我们往后的理解扫除一些障碍。</p>
+<p><span class="math inline">\(\quad\)</span>共轭分布(conjugate distribution)的概率中一共涉及到三个分布：先验、似然和后验，如果由先验分布和似然分布所确定的后验分布与该先验分布属于同一种类型的分布，则该先验分布为似然分布的共轭分布，也称为共轭先验。</p>
+<p><span class="math inline">\(\quad\)</span>比较绕嘴，下面从公式来理一下思路。假设变量<span class="math inline">\(x\)</span>服从分布<span class="math inline">\(P(x| \theta )\)</span>，其观测样本为<span class="math inline">\(X={x_1,x_2,...,x_m}\)</span>，参数<span class="math inline">\(θ\)</span>服从先验分布<span class="math inline">\(Π(θ)\)</span>。那么后验分布为
+<span class="math display">\[P(θ|X)=\frac{Π(θ)P(X|θ)}{P(X)}\]</span></p>
+<p><span class="math inline">\(\quad\)</span>如果后验分布<span class="math inline">\(P(θ|X)\)</span>与先验分布<span class="math inline">\(Π(θ)\)</span>是同种类型的分布，则称先验分布<span class="math inline">\(Π(θ)\)</span>为似然分布<span class="math inline">\(P(X|θ)\)</span>的共轭分布(直观一点就是上面那个贝叶斯公式的分子里的两个)。</p>
+<p><span class="math inline">\(\quad\)</span>比较常用的几个例子有：高斯分布是高斯分布的共轭分布，Beta分布是二项分布的共轭分布，Dirichlet分布是多项分布的共轭分布。共轭分布不仅使求后验分布计算简单，更重要的是保留了先验分布的类型，使概率估计更加准确。</p>
+<p><span class="math inline">\(\quad\)</span>关于Dirichlet分布是Multinomial分布的共轭分布这点，我们在此不作过多的涉及，详细推导可以参考《LDA数学八卦》这本书。但是为了下面LDA模型阐述的方便，我们交代一下Dirichlet-Multinomial的共轭关系以及Beta/Dirichlet分布的一个性质。</p>
+<div id="dirichlet-multinomial的共轭关系" class="section level4">
+<h4>Dirichlet-Multinomial的共轭关系</h4>
+<p><span class="math inline">\(\quad\)</span>首先我们要强调的是贝叶斯参数估计的基本过程是：</p>
+<center>
+<strong>先验分布+数据的知识(实验后样本的情况) = 后验分布</strong>
+</center>
+<p><span class="math inline">\(\quad\)</span>其次我们给出两个分布的数学形式，一般形式的Dirichlet分布定义如下</p>
+<p><span class="math display">\[\begin{align*}
+Dir(\overrightarrow{p}|\overrightarrow{\alpha}) = 
+\frac{\Gamma(\sum_{k=1}^K) \alpha_k}{\prod_{k=1}^K \Gamma(\alpha_k)}
+\prod_{k=1}^K p_k^{\alpha_k - 1}
+\end{align*}\]</span></p>
+<p><em>注:这里的K代指进行多项分布实验的次数，或者叫维度吧。在我们UnigramModel的语境中，K = V，即K为语料库中词语总数V</em></p>
+<p><span class="math inline">\(\quad\)</span>对于给定的<span class="math inline">\(\overrightarrow{p}\)</span>和<span class="math inline">\(N\)</span>，多项分布的定义为</p>
+<p><span class="math display">\[\begin{align*}
+Mult(\overrightarrow{n}|\overrightarrow{p},N) = \binom{N}{\overrightarrow{n}}\prod_{k = 1}^{K}p_k^{n_k}\\
+\end{align*}\]</span></p>
+<p><em>注:这里的K在我们UnigramModel的语境中，与上面一致。K = V，即K为语料库中词语总数V。另外，笔者查阅教科书，并未发现这种分布写法，推测这应当是一种简单写法。根据Wiki百科关于多项分布的定义，这种“分布”应该是以下的简写：</em>(<span class="math inline">\(\overrightarrow{n}\)</span>是取值离散的，只有分布律一说)</p>
+<p><span class="math display">\[\begin{align*}
+&amp; \overrightarrow{n} \sim Mult(\overrightarrow{p},N),其中sum(\overrightarrow{n})=N\\
+&amp; P(\overrightarrow{n}) = \binom{N}{\overrightarrow{n}}\prod_{k = 1}^{K}p_k^{n_k}
+\end{align*}\]</span></p>
+<p><span class="math inline">\(\quad\)</span>最后，<span class="math inline">\(Mult(\overrightarrow{n}|\overrightarrow{p},N)\)</span>和<span class="math inline">\(Dir(\overrightarrow{p}|\overrightarrow{\alpha})\)</span>之间的共轭关系，不严谨地交代如下</p>
+<ol style="list-style-type: decimal">
+<li>以三维为例，我们要猜测参数<span class="math inline">\(\overrightarrow{p} = (p_1,p_2,p_3)\)</span>，其先验分布为<span class="math inline">\(Dir(\overrightarrow{p}|\overrightarrow{k})\)</span>；</li>
+</ol>
+</div>
 </div>
 </div>
 

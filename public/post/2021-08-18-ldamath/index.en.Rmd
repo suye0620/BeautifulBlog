@@ -13,7 +13,7 @@ cover: /img/LDAMath/LDAcover.jpg
 output:
   blogdown::html_page:
     toc: true
-    
+  
 summary: "关于LDA主题模型的数学推导过程"
 ---
 
@@ -50,7 +50,7 @@ $\quad$假设我们的词典(语料库corpus)中一共有$V$个词$v_1,v_2,...,v
 
 | Unigram Model                                                                                                               |
 |:----------------------------------------------------------------------------------------------------------------------------|
-| 1\. 假设有一个骰子，这个骰子有$V$个面，每个面对应一个词，各个面的概率不一；                                                 |
+| 1\. 假设有一个骰子，这个骰子有$V$个面，每个面对应一个词，各个面朝上的概率不一；                                                 |
 | 2\. 每抛掷一次骰子，抛出的面就对应地产生一个词；如果一篇文档中有$n$个词，产生一篇文档就要独立地抛掷$n$次骰子产生这$n$个词。 |
 
 $\quad$这个骰子的各个面的概率记为$\overrightarrow{p} = (p_1,p_2,...,p_V)$，其中$\sum_{k = 1}^Vp_k = 1$，所以每次投掷骰子的过程类似于一个抛硬币的贝努利实验，只是贝努利实验中我们抛的是一个"两面的骰子"，而此处抛掷的是一个$V$面的骰子，我们把抛这个$V$面骰子的实验记为$w \sim Mult(V,\overrightarrow{p})$。
@@ -162,4 +162,67 @@ p_k = \frac{n_k}{\lambda}\\
 \lambda = N\\
 \hat{p_k} = \frac{n_k}{\lambda} = \frac{n_k}{N}
 \end{align*}
+
+### 补充2：先验分布、后验分布、共轭分布
+
+$\quad$以上模型，均基于频率学派观点。贝叶斯统计学派会对此有不同的意见。在他们看来，一切参数都是随机变量，上述Unigram Model中的$\overrightarrow{p}$不是唯一固定的，它是一个随机变量。基于这样的想法，我们对Unigram Model的规则进行修改：
+
+|贝叶斯版本的Unigram Model|
+|:---|
+|1. 有一个装有无穷多个骰子的坛子，每个骰子都有$V$个面，每个面对应一个词，各个面朝上的概率不一。并且各个骰子代表的$\overrightarrow{p}$不一样；|
+|2. 我们从坛子里抽出一个骰子，即选择一个$\overrightarrow{p}$，然后用这个骰子不断地抛，直至产生了语料中的所有词(即达到了上面那个语料库词频向量$\overrightarrow{n}$)。|
+
+$\quad$这个坛子里面，骰子可以是无穷多个，有些类型的骰子多，有些类型的骰子少。所以从概率分布的角度看，坛子里面骰子代表的$\overrightarrow{p}$服从一个概率分布$P(\overrightarrow{p})$，这个分布称为参数$\overrightarrow{p}$的先验分布。
+
+```{r,fig.align='center',fig.cap="两种观点下Unigram Model的对比",out.width='50%',fig.show='hold'}
+knitr::include_graphics(c("./pic/Unigram1.jpg","./pic/Unigram2.jpg"))
+
+```
+
+$\quad$下面我们介绍一下先验分布、后验分布、共轭分布的概念，为我们往后的理解扫除一些障碍。
+
+$\quad$共轭分布(conjugate distribution)的概率中一共涉及到三个分布：先验、似然和后验，如果由先验分布和似然分布所确定的后验分布与该先验分布属于同一种类型的分布，则该先验分布为似然分布的共轭分布，也称为共轭先验。
+
+$\quad$比较绕嘴，下面从公式来理一下思路。假设变量$x$服从分布$P(x| \theta )$，其观测样本为$X={x_1,x_2,...,x_m}$，参数$θ$服从先验分布$Π(θ)$。那么后验分布为
+$$P(θ|X)=\frac{Π(θ)P(X|θ)}{P(X)}$$
+
+$\quad$如果后验分布$P(θ|X)$与先验分布$Π(θ)$是同种类型的分布，则称先验分布$Π(θ)$为似然分布$P(X|θ)$的共轭分布(直观一点就是上面那个贝叶斯公式的分子里的两个)。
+
+$\quad$比较常用的几个例子有：高斯分布是高斯分布的共轭分布，Beta分布是二项分布的共轭分布，Dirichlet分布是多项分布的共轭分布。共轭分布不仅使求后验分布计算简单，更重要的是保留了先验分布的类型，使概率估计更加准确。 
+
+$\quad$关于Dirichlet分布是Multinomial分布的共轭分布这点，我们在此不作过多的涉及，详细推导可以参考《LDA数学八卦》这本书。但是为了下面LDA模型阐述的方便，我们交代一下Dirichlet-Multinomial的共轭关系以及Beta/Dirichlet分布的一个性质。
+
+#### Dirichlet-Multinomial的共轭关系
+
+$\quad$首先我们要强调的是贝叶斯参数估计的基本过程是：
+
+<center><strong>先验分布+数据的知识(实验后样本的情况) = 后验分布</strong></center>
+
+$\quad$其次我们给出两个分布的数学形式，一般形式的Dirichlet分布定义如下
+
+\begin{align*}
+Dir(\overrightarrow{p}|\overrightarrow{\alpha}) = 
+\frac{\Gamma(\sum_{k=1}^K) \alpha_k}{\prod_{k=1}^K \Gamma(\alpha_k)}
+\prod_{k=1}^K p_k^{\alpha_k - 1}
+\end{align*}
+
+*注:这里的K代指进行多项分布实验的次数，或者叫维度吧。在我们UnigramModel的语境中，K = V，即K为语料库中词语总数V*
+
+$\quad$对于给定的$\overrightarrow{p}$和$N$，多项分布的定义为
+
+\begin{align*}
+Mult(\overrightarrow{n}|\overrightarrow{p},N) = \binom{N}{\overrightarrow{n}}\prod_{k = 1}^{K}p_k^{n_k}\\
+\end{align*}
+
+*注:这里的K在我们UnigramModel的语境中，与上面一致。K = V，即K为语料库中词语总数V。另外，笔者查阅教科书，并未发现这种分布写法，推测这应当是一种简单写法。根据Wiki百科关于多项分布的定义，这种“分布”应该是以下的简写：*($\overrightarrow{n}$是取值离散的，只有分布律一说)
+
+\begin{align*}
+& \overrightarrow{n} \sim Mult(\overrightarrow{p},N),其中sum(\overrightarrow{n})=N\\
+& P(\overrightarrow{n}) = \binom{N}{\overrightarrow{n}}\prod_{k = 1}^{K}p_k^{n_k}
+\end{align*}
+
+$\quad$最后，$Mult(\overrightarrow{n}|\overrightarrow{p},N)$和$Dir(\overrightarrow{p}|\overrightarrow{\alpha})$之间的共轭关系，不严谨地交代如下
+
+1. 以三维为例，我们要猜测参数$\overrightarrow{p} = (p_1,p_2,p_3)$，其先验分布为$Dir(\overrightarrow{p}|\overrightarrow{k})$；
+
 
