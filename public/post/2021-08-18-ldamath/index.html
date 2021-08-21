@@ -407,8 +407,25 @@ Mult(\overrightarrow{n}|\overrightarrow{p},N) = \binom{N}{\overrightarrow{n}}\pr
 \end{align*}\]</span></p>
 <p><span class="math inline">\(\quad\)</span>最后，<span class="math inline">\(Mult(\overrightarrow{n}|\overrightarrow{p},N)\)</span>和<span class="math inline">\(Dir(\overrightarrow{p}|\overrightarrow{\alpha})\)</span>之间的共轭关系，不严谨地交代如下</p>
 <ol style="list-style-type: decimal">
-<li>以三维为例，我们要猜测参数<span class="math inline">\(\overrightarrow{p} = (p_1,p_2,p_3)\)</span>，其先验分布为<span class="math inline">\(Dir(\overrightarrow{p}|\overrightarrow{k})\)</span>；</li>
+<li><p>以三维为例，我们要猜测参数<span class="math inline">\(\overrightarrow{p} = (p_1,p_2,p_3)\)</span>，其先验分布为<span class="math inline">\(Dir(\overrightarrow{p}|\overrightarrow{k})\)</span>；</p></li>
+<li><p>数据<span class="math inline">\(Y_i\)</span>落到<span class="math inline">\([0,p_1),[p_1,p_2),[p_2,1]\)</span>三个区间的个数分别为<span class="math inline">\(m_1,m_2,m_3\)</span>，所以<span class="math inline">\(\overrightarrow{m} = (m_1,m_2,m_3)\)</span>服从多项分布<span class="math inline">\(Mult(\overrightarrow{m}|\overrightarrow{p})\)</span></p></li>
+<li><p>在给定了来自数据提供的知识<span class="math inline">\(\overrightarrow{m}\)</span>后，<span class="math inline">\(\overrightarrow{p}\)</span>的后验分布变为<span class="math inline">\(Dir(\overrightarrow{p}|\overrightarrow{k}+\overrightarrow{m})\)</span></p></li>
 </ol>
+<p><span class="math inline">\(\quad\)</span>以上贝叶斯分析过程的简单表述就是：
+<span class="math display">\[
+Dir(\overrightarrow{p}|\overrightarrow{k})(先验)+MultCount(\overrightarrow{m})(共轭) = Dir(\overrightarrow{p}|\overrightarrow{k}+\overrightarrow{m})(后验)
+\]</span></p>
+<p><span class="math inline">\(\quad\)</span>令<span class="math inline">\(\overrightarrow{k} = \overrightarrow{\alpha}\)</span>，即把先验分布<span class="math inline">\(Dir(\overrightarrow{p}|\overrightarrow{k})\)</span>从整数集合延拓到实数集合，更一般的关系就如下：</p>
+<p><span class="math display">\[
+Dir(\overrightarrow{p}|\overrightarrow{\alpha})+MultCount(\overrightarrow{m}) = Dir(\overrightarrow{p}|\overrightarrow{\alpha}+\overrightarrow{m})
+\]</span></p>
+<p><span class="math inline">\(\quad\)</span>上面的式子描述的就是Dirichlet-Multinomial的共轭关系，我们还可以从3维往更高的维度上继续推广，就可以得到更高维度的Dirichlet-Multinomial的共轭。</p>
+<p><span class="math inline">\(\quad\)</span>看到这里，我们已经能够察觉到LDA模型中的参数<span class="math inline">\(\alpha,\beta\)</span>是哪里来的了——没错，它们来自于多项分布的共轭分布：Dirichlet分布。它们是Dirichlet分布产生<span class="math inline">\(\overrightarrow{p}\)</span>的重要条件。</p>
+</div>
+<div id="betadirichlet分布的一个性质" class="section level4">
+<h4>Beta/Dirichlet分布的一个性质</h4>
+<p><span class="math inline">\(\quad\)</span>如果<span class="math inline">\(\overrightarrow{p} \sim Beta(t|\alpha,\beta)\)</span>，则</p>
+<p>（未完待续······）</p>
 </div>
 </div>
 </div>

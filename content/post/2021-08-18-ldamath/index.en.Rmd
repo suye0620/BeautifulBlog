@@ -225,4 +225,27 @@ $\quad$最后，$Mult(\overrightarrow{n}|\overrightarrow{p},N)$和$Dir(\overrigh
 
 1. 以三维为例，我们要猜测参数$\overrightarrow{p} = (p_1,p_2,p_3)$，其先验分布为$Dir(\overrightarrow{p}|\overrightarrow{k})$；
 
+2. 数据$Y_i$落到$[0,p_1),[p_1,p_2),[p_2,1]$三个区间的个数分别为$m_1,m_2,m_3$，所以$\overrightarrow{m} = (m_1,m_2,m_3)$服从多项分布$Mult(\overrightarrow{m}|\overrightarrow{p})$
 
+3. 在给定了来自数据提供的知识$\overrightarrow{m}$后，$\overrightarrow{p}$的后验分布变为$Dir(\overrightarrow{p}|\overrightarrow{k}+\overrightarrow{m})$
+
+$\quad$以上贝叶斯分析过程的简单表述就是：
+$$
+Dir(\overrightarrow{p}|\overrightarrow{k})(先验)+MultCount(\overrightarrow{m})(共轭) = Dir(\overrightarrow{p}|\overrightarrow{k}+\overrightarrow{m})(后验)
+$$
+
+$\quad$令$\overrightarrow{k} = \overrightarrow{\alpha}$，即把先验分布$Dir(\overrightarrow{p}|\overrightarrow{k})$从整数集合延拓到实数集合，更一般的关系就如下：
+
+$$
+Dir(\overrightarrow{p}|\overrightarrow{\alpha})+MultCount(\overrightarrow{m}) = Dir(\overrightarrow{p}|\overrightarrow{\alpha}+\overrightarrow{m})
+$$
+
+$\quad$上面的式子描述的就是Dirichlet-Multinomial的共轭关系，我们还可以从3维往更高的维度上继续推广，就可以得到更高维度的Dirichlet-Multinomial的共轭。
+
+$\quad$看到这里，我们已经能够察觉到LDA模型中的参数$\alpha,\beta$是哪里来的了——没错，它们来自于多项分布的共轭分布：Dirichlet分布。它们是Dirichlet分布产生$\overrightarrow{p}$的重要条件。
+
+#### Beta/Dirichlet分布的一个性质
+
+$\quad$如果$\overrightarrow{p} \sim Beta(t|\alpha,\beta)$，则
+
+（未完待续······）
