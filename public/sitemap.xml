@@ -3,27 +3,33 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://suye.netlify.app/categories/</loc>
-    <lastmod>2021-08-18T00:00:00+00:00</lastmod>
+    <lastmod>2021-12-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://suye.netlify.app/tags/math/</loc>
+    <lastmod>2021-12-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://suye.netlify.app/tags/nn/</loc>
+    <lastmod>2021-12-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://suye.netlify.app/post/</loc>
+    <lastmod>2021-12-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://suye.netlify.app/tags/</loc>
+    <lastmod>2021-12-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://suye.netlify.app/post/2021-12-07-ideas-about-nn/</loc>
+    <lastmod>2021-12-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://suye.netlify.app/</loc>
+    <lastmod>2021-12-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://suye.netlify.app/categories/%E6%96%87%E7%AB%A0/</loc>
+    <lastmod>2021-12-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://suye.netlify.app/post/2021-08-18-ldamath/</loc>
     <lastmod>2021-08-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://suye.netlify.app/tags/math/</loc>
-    <lastmod>2021-08-18T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://suye.netlify.app/tags/nlp/</loc>
-    <lastmod>2021-08-18T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://suye.netlify.app/post/</loc>
-    <lastmod>2021-08-18T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://suye.netlify.app/tags/</loc>
-    <lastmod>2021-08-18T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://suye.netlify.app/</loc>
-    <lastmod>2021-08-18T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://suye.netlify.app/categories/%E6%96%87%E7%AB%A0/</loc>
     <lastmod>2021-08-18T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://suye.netlify.app/aboutme/</loc>
